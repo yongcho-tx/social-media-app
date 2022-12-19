@@ -25,6 +25,7 @@ app.use(
 )
 app.use("/api/issue", require("./routes/issueRouter.js"))
 app.use("/api/comment", require("./routes/commentRouter.js"))
+app.use("/api/user", require("./routes/userRouter.js"))
 
 app.use((err, req, res, next) => {
   console.log(err)

@@ -4,7 +4,7 @@ import IssueForm from "./IssueForm.js"
 import IssueList from "./IssueList.js"
 
 const style = {
-  profile: `flex flex-col items-center h-screen`,
+  container: `flex flex-col items-center h-screen`,
   h1: `m-8 text-3xl`,
   h3: `m-4 underline`,
 }
@@ -16,9 +16,9 @@ const Profile = () => {
   } = useContext(UserContext)
   console.log(issues)
   return (
-    <div className={style.profile}>
+    <div className={style.container}>
       <h1 className={style.h1}>Welcome @{username}!</h1>
-      <h3>Add an Issue</h3>
+      <h3>Create a new post</h3>
       <IssueForm btnText='Add Issue' submit={addIssue} />
       {issues.length < 1 ? (
         <>

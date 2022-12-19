@@ -7,7 +7,7 @@ import { FiThumbsUp, FiThumbsDown } from "react-icons/fi"
 import { BsThreeDots } from "react-icons/bs"
 
 const style = {
-  cardContainer: `border border-black rounded-lg m-5 max-w-[600px]`,
+  cardContainer: `border border-black rounded-lg m-5`,
   card: `flex flex-col m-4`,
   header: `flex justify-between`,
   img: `max-h-[screen] max-w-[500px] my-3`,
@@ -31,11 +31,17 @@ const IssueCard = (props) => {
     getUserIssues,
     editIssue,
     user: { username },
+    usersList,
+    getUsersList,
   } = useContext(UserContext)
 
   useEffect(() => {
     getUserIssues()
   }, [downvotesCount, upvotesCount])
+
+  useEffect(() => {
+    getUsersList()
+  }, [])
 
   const handleUpvote = () => {
     userAxios
@@ -60,17 +66,21 @@ const IssueCard = (props) => {
 
   const handleMenuClick = () => setMenu(!menu)
 
+  const originalPoster = usersList.map(
+    (user) => user._id === props.user && user.username
+  )
+
   return (
     <div className={style.cardContainer}>
       {!editToggle ? (
         <div className={style.card}>
           <div className={style.header}>
             <h1 className={style.h1}>{title}</h1>
+            {/* //three dot menubar */}
             <BsThreeDots
               onClick={handleMenuClick}
               className='text-[25px] hover:bg-slate-100'
             />
-            {/* //three dot menubar */}
           </div>
           {/* Card menu */}
           <div
@@ -100,7 +110,8 @@ const IssueCard = (props) => {
               <FiThumbsUp
                 onClick={handleUpvote}
                 className={
-                  upvotesCount > 0
+                  (upvotesCount > 0 && upvotesCount > downvotesCount) ||
+                  upvotesCount > downvotesCount
                     ? "text-blue-600 text-[25px] hover:bg-slate-400"
                     : "text-[25px] hover:bg-slate-300"
                 }
@@ -109,7 +120,8 @@ const IssueCard = (props) => {
               <FiThumbsDown
                 onClick={handleDownvote}
                 className={
-                  downvotesCount > 0
+                  (downvotesCount > 0 && downvotesCount > upvotesCount) ||
+                  downvotesCount > upvotesCount
                     ? "text-blue-600 text-[25px] hover:bg-slate-300"
                     : "text-[25px] hover:bg-slate-300"
                 }
@@ -121,7 +133,7 @@ const IssueCard = (props) => {
               <CommentForm _id={_id} />
             </div>
           </div>
-          <p>Post by: {username} </p>
+          <p>Posted by: {originalPoster}</p>
         </div>
       ) : (
         <>

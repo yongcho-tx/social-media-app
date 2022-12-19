@@ -21,6 +21,7 @@ const UserProvider = (props) => {
   const [userState, setUserState] = useState(initState)
   const [allIssues, setAllIssues] = useState([])
   const [allComments, setAllComments] = useState([])
+  const [usersList, setUsersList] = useState([])
 
   const signup = (credentials) => {
     axios
@@ -187,6 +188,13 @@ const UserProvider = (props) => {
       .catch((err) => console.log(err.response.data.errMsg))
   }
 
+  const getUsersList = () => {
+    userAxios
+      .get(`/api/user`)
+      .then((res) => setUsersList(res.data))
+      .catch((err) => console.log(err.response.data.errMsg))
+  }
+
   const getComments = () => {
     userAxios
       .get(`/api/comment`)
@@ -207,14 +215,17 @@ const UserProvider = (props) => {
         addIssue,
         resetAuthErr,
         getUserIssues,
+        getUsersList,
         setUserState,
         deleteIssue,
         editIssue,
         upVote,
+        usersList,
         downVote,
         getAllIssues,
         allIssues,
         getComments,
+        allComments,
       }}
     >
       {props.children}

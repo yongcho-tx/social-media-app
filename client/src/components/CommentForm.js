@@ -12,6 +12,7 @@ const CommentForm = (props) => {
   const [comments, setComments] = useState([])
   const [isOpen, setIsOpen] = useState(false)
   const { _id } = props
+  const { allComments, getComments } = useContext(UserContext)
 
   const addComment = () => {
     userAxios
@@ -33,7 +34,6 @@ const CommentForm = (props) => {
   }
 
   const handleShowComments = () => {
-    // if (comments.length < 1) {
     userAxios
       .get(`/api/comment/${_id}`)
       .then((res) => {
@@ -44,6 +44,11 @@ const CommentForm = (props) => {
     // }
     setIsOpen(!isOpen)
   }
+
+  useEffect(() => {
+    handleShowComments()
+    setIsOpen(isOpen)
+  }, [])
 
   return (
     <>
@@ -59,10 +64,10 @@ const CommentForm = (props) => {
               name='comment'
               value={comment}
               onChange={(e) => setComment(e.target.value)}
-              className='w-[80%] p-[10px] border border-[#343434]'
+              className='w-[80%] p-[10px] border border-[#343434] m-2'
               placeholder='add comment'
             />
-            <button className='my-[5px] w-[80%] bg-[#efefef]'>
+            <button className='w-[80%] bg-[#efefef] m-2 h-[45px]'>
               Add Comment
             </button>
           </form>

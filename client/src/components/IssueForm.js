@@ -2,7 +2,7 @@ import React, { useState, useEffect, useContext } from "react"
 import { UserContext } from "../context/UserProvider.js"
 
 const style = {
-  form: `flex flex-col my-4 p-4 bg-[#aaa9] rounded`,
+  form: `flex flex-col my-4 p-4 bg-slate-400 rounded w-[300px]`,
   input: `my-2 p-2 rounded`,
   button: `my-2 p-2 rounded bg-[#efefef]`,
 }

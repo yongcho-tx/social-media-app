@@ -1,12 +1,11 @@
 const express = require("express")
-const issue = require("../models/issue.js")
 const issueRouter = express.Router()
-const Issue = require('../models/issue.js')
+const Issue = require("../models/issue.js")
 
 // Get All Issues
 issueRouter.get("/", (req, res, next) => {
   Issue.find((err, issues) => {
-    if(err){
+    if (err) {
       res.status(500)
       return next(err)
     }
@@ -16,7 +15,7 @@ issueRouter.get("/", (req, res, next) => {
 // Get Issues by user id ***only works when user bearer token matches and does not need a separate ID since it's getting auth credentials by req.auth._id***
 issueRouter.get("/user", (req, res, next) => {
   Issue.find({ user: req.auth._id }, (err, issues) => {
-    if(err) {
+    if (err) {
       res.status(500)
       return next(err)
     }
@@ -25,21 +24,20 @@ issueRouter.get("/user", (req, res, next) => {
 })
 //Get Issue by ID
 issueRouter.get("/:issueId", (req, res, next) => {
-  Issue.find({ _id: req.params.issueId, user: req.auth._id },
-    (err, issues) => {
-      if(err) {
-        res.status(500)
-        return next(err)
-      }
-      return res.status(200).send(issues)
-    })
+  Issue.find({ _id: req.params.issueId, user: req.auth._id }, (err, issues) => {
+    if (err) {
+      res.status(500)
+      return next(err)
+    }
+    return res.status(200).send(issues)
+  })
 })
 // Add New Issue
 issueRouter.post("/", (req, res, next) => {
   req.body.user = req.auth._id
   const newIssue = new Issue(req.body)
   newIssue.save((err, savedIssue) => {
-    if(err){
+    if (err) {
       res.status(500)
       return next(err)
     }
@@ -51,12 +49,15 @@ issueRouter.delete("/:issueId", (req, res, next) => {
   Issue.findOneAndDelete(
     { _id: req.params.issueId, user: req.auth._id },
     (err, deletedIssue) => {
-      if(err){
+      if (err) {
         res.status(500)
         return next(err)
       }
-      return res.status(200).send(`Successfully deleted issue ${deletedIssue.title}`)
-    })
+      return res
+        .status(200)
+        .send(`Successfully deleted issue ${deletedIssue.title}`)
+    }
+  )
 })
 // Update Issue
 issueRouter.put("/:issueId", (req, res, next) => {
@@ -65,12 +66,13 @@ issueRouter.put("/:issueId", (req, res, next) => {
     req.body,
     { new: true },
     (err, updatedIssue) => {
-      if(err){
+      if (err) {
         res.status(500)
         return next(err)
       }
       return res.status(201).send(updatedIssue)
-    })
+    }
+  )
 })
 // upvote
 // issueRouter.put("/upvote/:issueId", (req, res, next) => {
@@ -139,12 +141,13 @@ issueRouter.put("/:issueId", (req, res, next) => {
 issueRouter.put("/upvote/:issueId", (req, res, next) => {
   Issue.findByIdAndUpdate(
     { _id: req.params.issueId, user: req.auth._id },
-    { $addToSet: { upvotes: req.auth._id },
-      $pull: { downvotes: req.auth._id }
+    {
+      $addToSet: { upvotes: req.auth._id },
+      $pull: { downvotes: req.auth._id },
     },
     { new: true },
     (err, updatedIssue) => {
-      if(err) {
+      if (err) {
         res.status(500)
         return next(err)
       }
@@ -156,12 +159,13 @@ issueRouter.put("/upvote/:issueId", (req, res, next) => {
 issueRouter.put("/downvote/:issueId", (req, res, next) => {
   Issue.findByIdAndUpdate(
     { _id: req.params.issueId, user: req.auth._id },
-    { $addToSet: { downvotes: req.auth._id },
-      $pull: { upvotes: req.auth._id }
+    {
+      $addToSet: { downvotes: req.auth._id },
+      $pull: { upvotes: req.auth._id },
     },
     { new: true },
     (err, updatedIssue) => {
-      if(err) {
+      if (err) {
         res.status(500)
         return next(err)
       }
