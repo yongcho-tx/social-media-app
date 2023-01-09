@@ -20,7 +20,8 @@ const style = {
 }
 
 const IssueCard = (props) => {
-  const { title, description, _id, comment, imgUrl, upvotes, downvotes } = props
+  const { title, description, _id, user, comment, imgUrl, upvotes, downvotes } =
+    props
   const [upvotesCount, setUpvotesCount] = useState(upvotes.length)
   const [downvotesCount, setDownvotesCount] = useState(downvotes.length)
   const [editToggle, setEditToggle] = useState(false)
@@ -33,6 +34,7 @@ const IssueCard = (props) => {
     user: { username },
     usersList,
     getUsersList,
+    allIssues,
   } = useContext(UserContext)
 
   useEffect(() => {
@@ -69,6 +71,9 @@ const IssueCard = (props) => {
   const originalPoster = usersList.map(
     (user) => user._id === props.user && user.username
   )
+  const userIdentity = allIssues.map((issue) => issue.user)
+  console.log(props.user)
+  console.log(userIdentity)
 
   return (
     <div className={style.cardContainer}>
@@ -90,7 +95,14 @@ const IssueCard = (props) => {
                 : "w-full h-full bg-slate-300 flex flex-col items-center justify-center rounded"
             }
           >
-            <button className='py-3 text-xl' onClick={() => deleteIssue(_id)}>
+            <button
+              className='py-3 text-xl'
+              onClick={() =>
+                originalPoster === userIdentity
+                  ? deleteIssue(_id)
+                  : alert("You do not have autority to delete this issue")
+              }
+            >
               delete
             </button>
             <button

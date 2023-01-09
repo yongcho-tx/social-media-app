@@ -24,6 +24,7 @@ const Public = (props) => {
   ))
   const { downvotesCount, upvotesCount } = props
 
+  console.log(publicIssues)
   useEffect(() => {
     console.log("use effect ran")
     getAllIssues()

@@ -11,7 +11,7 @@ const CommentForm = (props) => {
   const [comment, setComment] = useState(initComment)
   const [comments, setComments] = useState([])
   const [isOpen, setIsOpen] = useState(false)
-  const { _id } = props
+  const { _id, user } = props
   const { allComments, getComments } = useContext(UserContext)
 
   const addComment = () => {
@@ -50,6 +50,7 @@ const CommentForm = (props) => {
     setIsOpen(isOpen)
   }, [])
 
+  console.log(props.user)
   return (
     <>
       <div className='flex items-center gap-2.5 hover:bg-slate-300'>
